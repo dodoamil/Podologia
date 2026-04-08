@@ -112,3 +112,45 @@ class FichaAnamnese(models.Model):
     class Meta:
         verbose_name = 'Ficha de Anamnese'
         verbose_name_plural = 'Fichas de Anamnese'
+
+
+class Material(models.Model):
+    nome = models.CharField(max_length=200, verbose_name='Nome do Material/Insumo')
+    unidade_medida = models.CharField(max_length=50, verbose_name='Unidade de Medida', help_text='Ex: Unidade, Caixa, Pacote, ML')
+    quantidade_atual = models.IntegerField(default=0, verbose_name='Quantidade Atual', help_text='Atualizado automaticamente pelas movimentações')
+    estoque_minimo = models.IntegerField(default=5, verbose_name='Estoque Mínimo Ideal')
+
+    def __str__(self):
+        return f'{self.nome} - Saldo: {self.quantidade_atual} {self.unidade_medida}'
+
+    class Meta:
+        verbose_name = 'Material'
+        verbose_name_plural = 'Estoque de Materiais'
+
+class MovimentacaoEstoque(models.Model):
+    TIPO_MOVIMENTO = [
+        ('E', 'Entrada'),
+        ('S', 'Saída'),
+    ]
+
+    material = models.ForeignKey(Material, on_delete=models.CASCADE, related_name='movimentacoes')
+    tipo = models.CharField(max_length=1, choices=TIPO_MOVIMENTO, verbose_name='Tipo de Movimentação')
+    quantidade = models.PositiveIntegerField()
+    data = models.DateTimeField(auto_now_add=True, verbose_name='Data da Movimentação')
+    motivo = models.CharField(max_length=255, null=True, blank=True, verbose_name='Motivo (Opcional)', help_text='Ex: Compra, Reposição, Descarte, Uso no Atendimento X')
+
+    def save(self, *args, **kwargs):
+        if self.pk is None: # Apenas atualiza o saldo em novas movimentações
+            if self.tipo == 'E':
+                self.material.quantidade_atual += self.quantidade
+            elif self.tipo == 'S':
+                self.material.quantidade_atual -= self.quantidade
+            self.material.save()
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f'{self.get_tipo_display()} - {self.material.nome} ({self.quantidade})'
+
+    class Meta:
+        verbose_name = 'Movimentação de Estoque'
+        verbose_name_plural = 'Histórico de Movimentações'

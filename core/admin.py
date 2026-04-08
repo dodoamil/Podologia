@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import Cliente, Agendamento, Atendimento, Pagamento, FichaAnamnese
+from django.utils.html import format_html
+from .models import Cliente, Agendamento, Atendimento, Pagamento, FichaAnamnese, Material, MovimentacaoEstoque
 
 class FichaAnamneseInline(admin.StackedInline):
     model = FichaAnamnese
@@ -29,3 +30,22 @@ class PagamentoAdmin(admin.ModelAdmin):
     list_display = ('cliente', 'valor', 'forma_pagamento', 'pago', 'data_pagamento')
     list_filter = ('pago', 'forma_pagamento', 'data_pagamento')
     search_fields = ('cliente__nome',)
+
+
+@admin.register(Material)
+class MaterialAdmin(admin.ModelAdmin):
+    list_display = ('nome', 'quantidade_atual', 'unidade_medida', 'estoque_minimo', 'status_estoque')
+    search_fields = ('nome',)
+    readonly_fields = ('quantidade_atual',)
+
+    def status_estoque(self, obj):
+        if obj.quantidade_atual <= obj.estoque_minimo:
+            return format_html('<span style="color: red; font-weight: bold;">⚠️ Abaixo do Mínimo</span>')
+        return format_html('<span style="color: green;">Normal</span>')
+    status_estoque.short_description = 'Status'
+
+@admin.register(MovimentacaoEstoque)
+class MovimentacaoEstoqueAdmin(admin.ModelAdmin):
+    list_display = ('material', 'tipo', 'quantidade', 'data', 'motivo')
+    list_filter = ('tipo', 'data')
+    search_fields = ('material__nome', 'motivo')
