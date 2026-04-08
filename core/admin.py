@@ -40,8 +40,8 @@ class MaterialAdmin(admin.ModelAdmin):
 
     def status_estoque(self, obj):
         if obj.quantidade_atual <= obj.estoque_minimo:
-            return format_html('<span style="color: red; font-weight: bold;">⚠️ Abaixo do Mínimo</span>')
-        return format_html('<span style="color: green;">Normal</span>')
+            return format_html('<span style="color: red; font-weight: bold;">{}</span>', '⚠️ Abaixo do Mínimo')
+        return format_html('<span style="color: green;">{}</span>', 'Normal')
     status_estoque.short_description = 'Status'
 
 @admin.register(MovimentacaoEstoque)
