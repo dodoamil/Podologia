@@ -70,3 +70,45 @@ class Pagamento(models.Model):
     class Meta:
         verbose_name = "Pagamento"
         verbose_name_plural = "Financeiro"
+
+
+class FichaAnamnese(models.Model):
+    TIPO_PE_CHOICES = [
+        ('N', 'Normal'),
+        ('P', 'Plano (Chato)'),
+        ('C', 'Cavo'),
+    ]
+    TIPO_PISADA_CHOICES = [
+        ('N', 'Neutra'),
+        ('P', 'Pronada (Para dentro)'),
+        ('S', 'Supinada (Para fora)'),
+    ]
+
+    cliente = models.OneToOneField(Cliente, on_delete=models.CASCADE, related_name='anamnese')
+    data_preenchimento = models.DateTimeField(auto_now_add=True, verbose_name='Data de Preenchimento')
+    
+    # Histórico Médico
+    diabetico = models.BooleanField(default=False, verbose_name='Diabético?')
+    hipertenso = models.BooleanField(default=False, verbose_name='Hipertenso?')
+    problema_circulacao = models.BooleanField(default=False, verbose_name='Problemas de Circulação?')
+    problema_cicatrizacao = models.BooleanField(default=False, verbose_name='Problemas de Cicatrização?')
+    alergias = models.TextField(null=True, blank=True, verbose_name='Alergias (Quais?)')
+    cirurgias_anteriores = models.TextField(null=True, blank=True, verbose_name='Cirurgias Anteriores')
+    medicamentos_continuos = models.TextField(null=True, blank=True, verbose_name='Uso de Medicamentos Mencionados')
+    
+    # Hábitos e Biomecânica
+    pratica_esporte = models.BooleanField(default=False, verbose_name='Pratica Esportes?')
+    tipo_calcado_diario = models.CharField(max_length=200, null=True, blank=True, verbose_name='Tipos de Calçados mais usados no Dia a Dia')
+    tipo_pe = models.CharField(max_length=1, choices=TIPO_PE_CHOICES, default='N', verbose_name='Tipo de Pé')
+    tipo_pisada = models.CharField(max_length=1, choices=TIPO_PISADA_CHOICES, default='N', verbose_name='Tipo de Pisada')
+    
+    # Queixa
+    alteracoes_unhas = models.TextField(null=True, blank=True, verbose_name='Alterações nas Unhas (Onicocriptose, etc)')
+    queixa_principal = models.TextField(verbose_name='Queixa Principal / Motivo da Consulta')
+
+    def __str__(self):
+        return f'Anamnese - {self.cliente.nome}'
+
+    class Meta:
+        verbose_name = 'Ficha de Anamnese'
+        verbose_name_plural = 'Fichas de Anamnese'

@@ -1,10 +1,16 @@
 from django.contrib import admin
-from .models import Cliente, Agendamento, Atendimento, Pagamento
+from .models import Cliente, Agendamento, Atendimento, Pagamento, FichaAnamnese
+
+class FichaAnamneseInline(admin.StackedInline):
+    model = FichaAnamnese
+    can_delete = False
+    verbose_name_plural = 'fichas de anamnese'
 
 @admin.register(Cliente)
 class ClienteAdmin(admin.ModelAdmin):
     list_display = ('nome', 'telefone', 'data_nascimento')
     search_fields = ('nome', 'telefone')
+    inlines = (FichaAnamneseInline,)
 
 @admin.register(Agendamento)
 class AgendamentoAdmin(admin.ModelAdmin):
