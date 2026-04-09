@@ -1,0 +1,81 @@
+{% extends "admin/base.html" %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+    /* Custom Pink Palette Override for Django Admin */
+    :root {
+        --primary: #d81b60;
+        --secondary: #f48fb1;
+        --accent: #ff4081;
+        --primary-fg: #ffffff;
+
+        --body-fg: #333333;
+        --body-bg: #fdf5f7;  /* Soft pink tinted background */
+        --body-quiet-color: #666;
+        --body-loud-color: #000;
+
+        --header-color: #ffe3eb;
+        --header-branding-color: #ffffff;
+        --header-bg: #c2185b; /* Deep Rose for header */
+        --header-link-color: #ffffff;
+
+        --breadcrumbs-fg: #fce4ec;
+        --breadcrumbs-link-fg: #ffffff;
+        --breadcrumbs-bg: #d81b60;
+
+        --link-fg: #d81b60;
+        --link-hover-fg: #ff4081;
+        --link-selected-fg: #c2185b;
+
+        --button-fg: #ffffff;
+        --button-bg: #e91e63;
+        --button-hover-bg: #c2185b;
+        --default-button-bg: #ad1457;
+        --default-button-hover-bg: #880e4f;
+        --close-button-bg: #888888;
+        --close-button-hover-bg: #e91e63;
+        
+        --delete-button-bg: #f44336;
+        --delete-button-hover-bg: #d32f2f;
+
+        --object-tools-fg: #d81b60;
+        --object-tools-bg: #fce4ec;
+        --object-tools-hover-bg: #f8bbd0;
+    }
+
+    [data-theme="dark"] {
+        /* Subtle dark mode pink accents */
+        --primary: #f06292;
+        --primary-fg: #ffffff;
+
+        --body-fg: #eeeeee;
+        --body-bg: #1a1114; /* Very dark magenta tinted background */
+        --body-quiet-color: #bbbbbb;
+        --body-loud-color: #ffffff;
+
+        --header-color: #fce4ec;
+        --header-branding-color: #ffffff;
+        --header-bg: #880e4f;
+        --header-link-color: #ffffff;
+
+        --breadcrumbs-fg: #f8bbd0;
+        --breadcrumbs-link-fg: #ffffff;
+        --breadcrumbs-bg: #ad1457;
+
+        --link-fg: #f48fb1;
+        --link-hover-fg: #ff80ab;
+        --link-selected-fg: #f06292;
+
+        --button-fg: #ffffff;
+        --button-bg: #d81b60;
+        --button-hover-bg: #e91e63;
+        --default-button-bg: #c2185b;
+        --default-button-hover-bg: #ad1457;
+
+        --object-tools-fg: #fce4ec;
+        --object-tools-bg: #880e4f;
+        --object-tools-hover-bg: #ad1457;
+    }
+</style>
+{% endblock %}
